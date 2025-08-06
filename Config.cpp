@@ -1,37 +1,74 @@
 #include <filesystem>
 #include <yaml-cpp/yaml.h>
-#include <windows.h>
-#include "Enums.cpp"
 #include <fmt/core.h>
 #include <iostream>
 #include <fstream>
 #include "Config.h"
+
 // ================= PUBLIC =================
 Config::Config(std::string file) {
-    if (std::filesystem::exists(file.data())) {
-        try {
-            YAML::Node fgt = YAML::LoadFile(file);
-            // checkAllCfgErrors();
-            std::cout<<fgt["sosl"]<<std::endl;
-            std::cout<<"sss"<<std::endl;
 
-
-        } catch(const std::exception& e) {
-            std::cout<<e.what()<<std::endl;
-        }
-    } else {
-        std::cout<<"File does not exist"<<std::endl;
-        makeIfNotExist(file);
-    }
+    initConfig(file);
+    Config::fileSetter(file);
 }
 
-// ================= PRIVATE =================
-void makeIfNotExist(std::string file) {
-    std::ofstream fout(file);
-    fout<<"A: sosal\nB: POPA";
+YAML::Node Config::getNode() {
+    return YAML::LoadFile(Config::fileGetter());
+}
+
+bool Config::getValue(std::string key) {
+    return Config::getNode()[key].as<bool>();
+}
+
+void Config::setValue(std::string key, bool value) {
+    YAML::Node config = Config::getNode();
+    config[key] = value;
+
+    std::ofstream fout(Config::fileGetter());
+    fout<<config;
     fout.flush();
     fout.close();
 }
+
+
+// ================= PRIVATE =================
+void Config::initConfig(std::string file) {
+    std::ofstream (file,std::ios::app).close();
+    // fout_temp.close();
+    YAML::Node config = YAML::LoadFile(file);
+
+
+    for (const auto& [name,value] : Values::ConfigValues) {
+        if (!config[name]) {
+            config[name] = value;
+        }
+    }
+    std::vector<std::string>vec;
+    for (auto it = config.begin(); it!=config.end(); ++it) {
+
+            auto key = it->first;
+            std::string temp_key = key.as<std::string>();
+            if (!Values::ConfigValues.contains(temp_key)) {
+                vec.push_back(temp_key);
+                // config.remove(temp_key);
+            }
+
+    }
+
+    for (std::string key : vec) {
+        config.remove(key);
+    }
+
+
+
+
+    std::ofstream fout(file);
+    fout<<config;
+    fout.flush();
+    fout.close();
+
+}
+
 
 
 

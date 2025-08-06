@@ -33,7 +33,7 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
 endif()
 
-add_executable(SerGer main.cpp Enums.cpp Config.cpp)
+add_executable(SerGer main.cpp Config.cpp job.cpp Values.cpp)
 target_link_libraries(SerGer PRIVATE fmt::fmt)
 target_link_libraries(SerGer PRIVATE yaml-cpp::yaml-cpp)
 

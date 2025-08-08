@@ -1,6 +1,6 @@
 #pragma once
 #include <map>
-#include <string>
+#include <iostream>
 
 namespace Values {
     std::map<std::string,bool>ConfigValues {

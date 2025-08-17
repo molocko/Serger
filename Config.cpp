@@ -50,6 +50,7 @@ void Config::initConfig(std::string file) {
             if (!Values::ConfigValues.contains(temp_key)) {
                 vec.push_back(temp_key);
                 // config.remove(temp_key);
+                
             }
 
     }

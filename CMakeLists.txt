@@ -33,9 +33,12 @@ elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
 endif()
 
-#add_executable(SerGer main.cpp Config.cpp job.cpp Values.cpp) # VALUES>CPP
+include_directories(headers)
+
+add_executable(SerGer Main.cpp Config.cpp Job.cpp Fimager.cpp Manager.cpp ServerClass.cpp) # VALUES>CPP
 target_link_libraries(SerGer PRIVATE fmt::fmt)
 target_link_libraries(SerGer PRIVATE yaml-cpp::yaml-cpp)
+target_link_libraries(SerGer PRIVATE Shlwapi)
 
 #target_link_options(SerGer PRIVATE -static-libgcc -static-libstdc++)
 
